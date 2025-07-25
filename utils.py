@@ -5,7 +5,7 @@ async def get_exchange_rate(from_currency, to_currency):
         async with session.get(url) as resp:
             data = await resp.json()
             print(f"API javobi: {data}")
-            return data["result"]
+            
             rate = data.get("result")
             if rate is None:
                 raise ValueError("Exchange rate not found.")
