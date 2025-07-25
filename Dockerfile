@@ -1,26 +1,28 @@
-FROM python:3.11-slim
+FROM python:3.10-slim
 
-RUN apt-get update && apt-get install -y gcc libffi-dev build-essential python3-dev && rm -rf /var/lib/apt/lists/*
-
-
+# System kutubxonalarni o‘rnatamiz
 RUN apt-get update && apt-get install -y \
     gcc \
     libffi-dev \
     build-essential \
-    python3.10-dev \
+    python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Katalog bilan ishlash
 WORKDIR /app
 
-COPY requirements.txt .
+# Fayllarni ko‘chirish
+COPY . /app
 
+# Virtual muhit va kutubxonalar o‘rnatish
 RUN python -m venv /opt/venv && \
     /opt/venv/bin/pip install --upgrade pip && \
     /opt/venv/bin/pip install -r requirements.txt
 
-COPY . .
-
+# PATH sozlash
 ENV PATH="/opt/venv/bin:$PATH"
 
+# Ishga tushirish
 CMD ["python", "bot.py"]
+
 
