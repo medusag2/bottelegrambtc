@@ -29,7 +29,7 @@ async def amount_handler(message: types.Message, state: FSMContext):
     data = await state.get_data()
     try:
         # foydalanuvchi 1 000 yoki 1,000 deb yozsa ham float'ga aylansin
-        cleaned_text = message.text.replace(",", "").replace(" ", "")
+        cleaned_text = message.text.replace(",", ".").replace(" ", "")
         amount = float(cleaned_text)
 
         rate = await get_exchange_rate(data['from_currency'], data['to_currency'])
