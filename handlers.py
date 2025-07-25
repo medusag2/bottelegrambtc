@@ -27,24 +27,28 @@ async def to_currency_handler(call: types.CallbackQuery, state: FSMContext):
 
 async def amount_handler(message: types.Message, state: FSMContext):
     data = await state.get_data()
+    user_input = message.text.replace(",", ".").replace(" ", "")
+
     try:
-        # foydalanuvchi 1 000 yoki 1,000 deb yozsa ham float'ga aylansin
-        cleaned_text = message.text.replace(",", ".").replace(" ", "")
-        amount = float(cleaned_text)
+        amount = float(user_input)
+    except ValueError:
+        await message.answer("⛔ Format noto'g'ri! Faqat son kiriting. Masalan: `12500` yoki `12.5`")
+        return
 
-        rate = await get_exchange_rate(data['from_currency'], data['to_currency'])
+    rate = await get_exchange_rate(data['from_currency'], data['to_currency'])
 
-        if rate is None:
-            raise ValueError("Exchange rate not found.")
+    if rate == "connection_error":
+        await message.answer("🌐 Valyuta xizmatiga ulanib bo'lmadi. Internet aloqangizni tekshirib, qayta urinib ko'ring.")
+        return
 
-        result = amount * rate
-        await message.answer(f"{amount} {data['from_currency']} = {result:.4f} {data['to_currency']}")
-        await message.answer("Yana valyuta tanlang:", reply_markup=currency_menu())
-        await CurrencyState.from_currency.set()
+    if rate is None:
+        await message.answer("📉 Valyuta kursi topilmadi. Iltimos, boshqa valyutani tanlang.")
+        return
 
-    except Exception as e:
-        print(f"❌ Xatolik: {e}")  # Railway log'da ko'rasiz
-        await message.answer("Noto‘g‘ri qiymat! Iltimos, faqat raqam kiriting.")
+    result = amount * rate
+    await message.answer(f"✅ {amount} {data['from_currency']} = {result:.4f} {data['to_currency']}")
+    await message.answer("Yana valyuta tanlang:", reply_markup=currency_menu())
+    await CurrencyState.from_currency.set()
 
 async def back_handler(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
