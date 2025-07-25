@@ -1,4 +1,4 @@
-from config import EXCHANGE_IP_KEY
+from config import EXCHANGE_API_KEY
 import aiohttp
 
 async def get_exchange_rate(from_currency, to_currency):
