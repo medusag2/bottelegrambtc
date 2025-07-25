@@ -28,14 +28,23 @@ async def to_currency_handler(call: types.CallbackQuery, state: FSMContext):
 async def amount_handler(message: types.Message, state: FSMContext):
     data = await state.get_data()
     try:
-        amount = float(message.text)
+        # foydalanuvchi 1 000 yoki 1,000 deb yozsa ham float'ga aylansin
+        cleaned_text = message.text.replace(",", "").replace(" ", "")
+        amount = float(cleaned_text)
+
         rate = await get_exchange_rate(data['from_currency'], data['to_currency'])
+
+        if rate is None:
+            raise ValueError("Exchange rate not found.")
+
         result = amount * rate
         await message.answer(f"{amount} {data['from_currency']} = {result:.4f} {data['to_currency']}")
         await message.answer("Yana valyuta tanlang:", reply_markup=currency_menu())
         await CurrencyState.from_currency.set()
-    except:
-        await message.answer("Noto‘g‘ri qiymat! Iltimos, raqam kiriting.")
+
+    except Exception as e:
+        print(f"❌ Xatolik: {e}")  # Railway log'da ko'rasiz
+        await message.answer("Noto‘g‘ri qiymat! Iltimos, faqat raqam kiriting.")
 
 async def back_handler(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
