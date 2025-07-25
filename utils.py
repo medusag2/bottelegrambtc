@@ -1,7 +1,7 @@
 import aiohttp
 
 async def get_exchange_rate(from_currency, to_currency):
-    get_exchange_rate(from_currency, to_currency):
+    get_exchange_rate(from_currency, to_currency)
     url = f"https://api.exchangerate.host/convert?from={from_currency}&to={to_currency}&access_key={EXCHANGE_API_KEY}"
     try:
         async with aiohttp.ClientSession() as session:
