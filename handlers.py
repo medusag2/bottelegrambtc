@@ -35,7 +35,7 @@ async def amount_handler(message: types.Message, state: FSMContext):
         await message.answer("⛔ Format noto'g'ri! Faqat son kiriting. Masalan: `12500` yoki `12.5`")
         return
 
-    rate = await get_exchange_rate(data['from_currency'], data['to_currency'])
+    rate = await get_exchange_rate(data['from_currency'], data['to_currency'], amount)
 
     if rate == "connection_error":
         await message.answer("🌐 Valyuta xizmatiga ulanib bo'lmadi. Internet aloqangizni tekshirib, qayta urinib ko'ring.")
