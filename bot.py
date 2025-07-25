@@ -16,5 +16,5 @@ dp.register_callback_query_handler(to_currency_handler, lambda c: c.data.startsw
 dp.register_callback_query_handler(back_handler, lambda c: c.data == "back", state="*")
 dp.register_message_handler(amount_handler, state=CurrencyState.amount)
 
-if name == '__main__':
+if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
