@@ -4,6 +4,12 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from keyboards import currency_menu, to_currency_menu
 from utils import get_exchange_rate
 
+from messages import messages
+
+lang = user_lang or "uz"  # har bir foydalanuvchining tilini aniqlang
+
+await message.answer(messages["start"][lang])
+
 class CurrencyState(StatesGroup):
     from_currency = State()
     to_currency = State()
