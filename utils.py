@@ -11,14 +11,14 @@ async def get_exchange_rate(from_currency: str, to_currency: str, amount: float)
                     return "connection_error"
 
                 data = await resp.json()
-                converted_amount = data.get("result")  # ✅ Bu tayyor qiymat
+                rate = data.get("result")
 
-                if converted_amount is None:
+                if rate is None:
                     print("❌ Kurs topilmadi")
                     return None
 
-                print(f"✅ API javobi: {converted_amount}")
-                return converted_amount  # ✅ To‘g‘ridan-to‘g‘ri natija qaytaryapti
+                print(f"✅ API javobi: {rate}")
+                return rate
 
     except aiohttp.ClientError as e:
         print(f"❌ API client xatosi: {e}")
