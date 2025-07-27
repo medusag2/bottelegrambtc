@@ -13,7 +13,6 @@ dp = Dispatcher(bot, storage=MemoryStorage())
 dp.register_message_handler(start_handler, commands="start", state="*")
 dp.register_callback_query_handler(from_currency_handler, lambda c: c.data.startswith("from_"), state="*")
 dp.register_callback_query_handler(to_currency_handler, lambda c: c.data.startswith("to_"), state=CurrencyState.to_currency)
-dp.register_callback_query_handler(back_handler, lambda c: c.data == "back", state="*")
 dp.register_message_handler(amount_handler, state=CurrencyState.amount)
 
 if __name__ == '__main__':
